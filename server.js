@@ -12,4 +12,12 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
+const stopApp = () => {
+  app.close();
+  db.destroy;
+}
+
 startApp;
+
+module.exports = stopApp()
+
