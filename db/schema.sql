@@ -27,5 +27,5 @@ CREATE TABLE employees (
     CONSTRAINT fk_role
         FOREIGN KEY (role_id)
         REFERENCES roles(id)
-        ON DELETE SET NULL,
+        ON DELETE SET NULL
 );

@@ -1,25 +1,44 @@
-//import db from ('../server');
+const managers = [];
+let managerId;
 const getEmployees = () => {
-    const sql = `SELECT first_name, last_name, role_id AS role, FROM employees
-                            INNER JOIN roles ON employees.role_id = roles.id
-                            INNER JOIN departments ON employees.department_id = department.id`;
-            db.query(sql, (err, rows) => {
-                if (err) {
-                    res.status(500).json({ error: err.message });
-                    return;
-                }
-                res.json({ 
-                    message: 'success',
-                    data: rows
-                });
-            })
-}
+                        const sql = `SELECT 
+                                        CONCAT(e.first_name, ', ', e.last_name) AS Employee, 
+                                        CONCAT(m.first_name, ', ', m.last_name) AS Manager,
+                                        roles.title AS role_title, roles.salary 
+                                    FROM 
+                                        employees AS e
+                                    INNER JOIN employees m ON
+                                        m.id = e.manager_id
+                                    LEFT JOIN roles ON 
+                                        e.role_id = roles.id`;
+                        db.query(sql, (err, rows) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                            console.table(rows);
+                        });
+};
 
-const addEmployee = () => {
+const addEmployee = response => {
 
-}
-const updateRole = () => {
+};
 
-}
+const updateRole = response => {
 
-module.exports = { getEmployees, addEmployee, updateRole }
+};
+
+const managerChoices = () => {
+    const managerSql = `SELECT first_name, last_name FROM employees` // sql to populate managers
+    db.query(managerSql, (err, rows) => { // query to populate manager choices 
+        if (err) {
+            console.log(err);
+            startApp();
+        };
+        for (let i = 0; i < rows.length; i++) {
+            managers.push(rows[i]);
+        };
+    })
+};
+
+
+module.exports = { getEmployees, addEmployee, updateRole, managerChoices, managers }
