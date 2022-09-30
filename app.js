@@ -30,6 +30,7 @@ const startApp = () => {
                                 startApp();
                             }
                             console.table(rows);
+                            startApp();
                         });
                     };
                     if (response.main === mainChoices[1]) { //view all roles
@@ -41,6 +42,7 @@ const startApp = () => {
                                 startApp();
                             }
                             console.table(rows);
+                            startApp();
                         });
                     }
                     if (response.main === mainChoices[2]) { //view all departments 
@@ -58,12 +60,12 @@ const startApp = () => {
                         const employeeParams = []; // holds parameters for employee creation 
                         const roles = []; // holds role choices
                         const managers = []; // holds manager choices 
-                        const roleSql = `SELECT roles.title FROM roles`; // sql to populate roles 
-                        const managerSql = `SELECT CONCAT(employees.first_name, ', ', employees.last_name) FROM employees` // sql to populate managers
+                        const roleSql = `SELECT title FROM roles`; // sql to populate roles 
+                        const managerSql = `SELECT first_name, last_name FROM employees` // sql to populate managers
                         db.query(roleSql, (err, rows) => { // query to populate role choices 
                             if (err) { 
                                 console.log(err);
-                                startApp;
+                                startApp();
                             }
                             for (let i = 0; i < rows.length; i++) {
                                 roles.push(rows[i]);
@@ -72,7 +74,7 @@ const startApp = () => {
                         db.query(managerSql, (err, rows) => { // query to populate manager choices 
                             if (err) {
                                 console.log(err);
-
+                                startApp();
                             };
                             for (let i = 0; i < rows.length; i++) {
                                 managers.push(rows[i]);
@@ -106,8 +108,8 @@ const startApp = () => {
                             const managerId = ''; // holds manager id for employee insertion 
                             const first = response.manager.split('')[0]; // first_name to get id for manager
                             const last = response.manager.split('')[1]; // last_name to get id for manager 
-                            const roleIdSql = `SELECT roles.id FROM roles WHERE title = ?`; // sql to get role id from choice
-                            const managerIdSql = `SELECT employees.id FROM employees WHERE first_name = ?, last_name = ?`; // sql to get manager id from choice 
+                            const roleIdSql = `SELECT id FROM roles WHERE title = ?`; // sql to get role id from choice
+                            const managerIdSql = `SELECT id FROM employees WHERE first_name = ?, last_name = ?`; // sql to get manager id from choice 
                             const roleParams = [response.role]; // holds role choice for id query
                             const managerParams = [first, last]; // holds split full name for manager id query 
                             db.query(roleIdSql, roleParams, (err, row) => { // query for role choice id 
@@ -132,6 +134,7 @@ const startApp = () => {
                                     startApp;
                                 };
                                 console.table(result);
+                                startApp();
                             })
                         })
                     }
@@ -196,12 +199,13 @@ const startApp = () => {
                         ).then(response => {
                             const sql = `INSERT INTO departments (name) VALUES (?)`;
                             const params = [response.name];
-                            db.query(sql, params, (err, result) => {
+                            db.query(sql, params, (err, row) => {
                                 if (err) {
                                     console.log(err);
                                     startApp;
                                 };
-                                console.log(result);
+                                console.log(row);
+                                startApp();
                             });
                         })
                     }
@@ -211,6 +215,7 @@ const startApp = () => {
                         db.query(employeeSql, (err, rows) => { // query to populate employee choices 
                             if (err) {
                                 console.log(err);
+                                startApp();
 
                             };
                             for (let i = 0; i < rows.length; i++) {
@@ -270,6 +275,7 @@ const startApp = () => {
                                     startApp;
                                 }
                                 console.table(result);
+                                startApp();
                             })
 
                         })

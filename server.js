@@ -13,7 +13,7 @@ app.listen(PORT, () => {
 });
 
 const stopApp = () => {
-  app.close();
+  //app.close();
   db.destroy;
 }
 
