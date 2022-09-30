@@ -29,5 +29,5 @@ const roleChoices = () => {
     })
 };
 
-module.exports = { getRoles, addRole, roleChoices, roles }
+module.exports = { getRoles, addRole, roleChoices, roles, roleId }
 

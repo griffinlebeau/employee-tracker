@@ -1,5 +1,6 @@
 const managers = [];
 let managerId;
+
 const getEmployees = () => {
                         const sql = `SELECT 
                                         CONCAT(e.first_name, ', ', e.last_name) AS Employee, 
@@ -41,4 +42,4 @@ const managerChoices = () => {
 };
 
 
-module.exports = { getEmployees, addEmployee, updateRole, managerChoices, managers }
+module.exports = { getEmployees, addEmployee, updateRole, managerChoices, managers, managerId }

@@ -2,8 +2,8 @@ const inquirer = require('inquirer');
 const db = require('./db/connection');
 const stopApp = require('./server');
 const { getDepartments, addDepartment, departments, departmentChoices, departmentId, deptId } = require('./utils/department');
-const { getRoles, addRole, roleChoices, roles } = require('./utils/role');
-const { getEmployees, addEmployee, updateRole, managers, managerChoices } = require('./utils/employee');
+const { getRoles, addRole, roleChoices, roles, roleId } = require('./utils/role');
+const { getEmployees, addEmployee, updateRole, managers, managerChoices, managerId } = require('./utils/employee');
 const mainChoices = ['View all employees', 'View all roles', 'View all departments', 'Add an employee', 'Add a role', 'Add a department', 'Update an Employee role', 'Quit'];
 
 
@@ -58,12 +58,12 @@ const startApp = () => {
                         ).then(response => {
                             let roleId = ''; // holds role id for employee insertion 
                             let managerId = ''; // holds manager id for employee insertion 
-                            //const first = response.manager.split('')[0]; // first_name to get id for manager
-                            //const last = response.manager.split('')[1]; // last_name to get id for manager 
+                            const first = response.manager.split('')[0]; // first_name to get id for manager
+                            const last = response.manager.split('')[1]; // last_name to get id for manager 
                             const roleIdSql = `SELECT id FROM roles WHERE title = ?`; // sql to get role id from choice
                             const managerIdSql = `SELECT id FROM employees WHERE first_name = ?, last_name = ?`; // sql to get manager id from choice 
                             const roleParams = [response.role]; // holds role choice for id query
-                            //const managerParams = [first, last]; // holds split full name for manager id query 
+                            const managerParams = [first, last]; // holds split full name for manager id query 
                             db.query(roleIdSql, roleParams, (err, row) => { // query for role choice id 
                                 if (err) {
                                     console.log(err);
@@ -71,13 +71,13 @@ const startApp = () => {
                                 };
                                 roleId = row;
                             });
-                            // db.query(managerIdSql, managerParams, (err, row) => { // query for manager choice id 
-                            //     if (err) {
-                            //         console.log(err);
-                            //         startApp;
-                            //     };
-                            //     managerId = row;
-                            // });
+                            db.query(managerIdSql, managerParams, (err, row) => { // query for manager choice id 
+                                 if (err) {
+                                     console.log(err);
+                                     startApp;
+                                 };
+                                 managerId = row;
+                             });
                             employeeParams.push(response.first, response.last, roleId, managerId); // params for final employee creation query
                             const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`
                             db.query(sql, employeeParams, (err, result) => {

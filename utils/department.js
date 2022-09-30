@@ -47,7 +47,7 @@ const departmentId = response => {
             console.log(err);
             startApp;
         }
-        roleParams.push(row);
+        deptId = row;
     })
 }
 module.exports = { getDepartments, addDepartment, departmentChoices, departmentId, departments, deptId }
