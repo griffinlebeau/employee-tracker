@@ -17,7 +17,7 @@ const addDepartment = response => {
         if (err) {
             console.log(err);
         };
-        console.log(row);
+        viewDepartments();
     });
 };
 
