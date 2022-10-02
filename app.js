@@ -155,8 +155,8 @@ const startApp = () => {
                         })
                     }
                     if (response.main === mainChoices[7]) { // exit app
-                        return
-                    }
+                        process.exit(0);
+                        }
                 })
 }
 
