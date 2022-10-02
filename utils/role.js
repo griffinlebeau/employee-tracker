@@ -13,17 +13,6 @@ const viewRoles = () => {
     });
 };
 
-const addRole = (response, deptId) => {
-    const params = [];
-    params.push(response.title, response.salary, deptId);
-    const sql = `INSET INTO roles (title, salary, department_id) VALUES (?, ?, ?)`;
-    db.query(sql, params, (err, result) => { // query to create new role
-        if (err) {
-            console.log(err);
-        };
-        console.table(result);
-    });
-};
 
 const roleChoices = () => {
     const sql = `SELECT title FROM roles`; // sql to populate roles 
@@ -48,5 +37,5 @@ const getRoleId = response => {
     });
 };
 
-module.exports = { viewRoles, addRole, roleChoices, getRoleId, roles, roleId }
+module.exports = { viewRoles, roleChoices, getRoleId, roles, roleId }
 

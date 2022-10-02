@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
-const stopApp = require('./server');
-const { viewDepartments, addDepartment, departments, departmentChoices, getdepartmentId, deptId } = require('./utils/department');
-const { viewRoles, addRole, roleChoices, getRoleId, roles, roleId } = require('./utils/role');
+const db = require('./db/connection');
+const { viewDepartments, addDepartment } = require('./utils/department');
+const { viewRoles, roleChoices, getRoleId, roles, roleId } = require('./utils/role');
 const { viewEmployees, addEmployee, updateRole, managers, managerChoices, getEmployeeId, managerId, getEmployeeFirstLast, employees, employeeId } = require('./utils/employee');
 const mainChoices = ['View all employees', 'View all roles', 'View all departments', 'Add an employee', 'Add a role', 'Add a department', 'Update an Employee role', 'Quit'];
 
@@ -61,29 +61,62 @@ const startApp = () => {
                         })
                     }
                     if (response.main === mainChoices[4]) { //add a role
-                        departmentChoices();
-                        console.log(departments);
-                        inquirer.prompt( //add role prompt
-                            {
-                                name: 'dept',
-                                type: 'list',
-                                message: 'Which department does the role belong to?',
-                                choices: departments
-                            },
+                        let departments = [];
+                        const sql = `SELECT name FROM departments`;
+                        db.query(sql, (err, rows) => { // query to populate department options 
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                for (let i = 0; i < rows.length; i++) {
+                                    departments.push(rows[i].name);
+                        
+                                };
+                            }
+                        });
+                        inquirer.prompt([
                             {
                                 name: 'title',
-                                type: 'input',
-                                message: 'What is the title of the role?'
+                                type: 'input', 
+                                message: 'What is the title of the role?',
                             },
                             {
                                 name: 'salary',
                                 type: 'input',
                                 message: 'What is the salary of the role?'
+                            },
+                            {
+                                name: 'department_id',
+                                type: 'list',
+                                message: 'Which department does the role belong to?',
+                                choices: departments,
                             }
-                        ).then(response => {
-                            getdepartmentId(response);//get department id from choice
-                            addRole(response, deptId)
-                            startApp();
+                        ]).then(response => {
+                            const sql = `SELECT departments.id FROM departments WHERE departments.name = ?`;
+                            const params = [response.department_id];
+                            db.query(sql, params, (err, row) => { // query to retrieve department ID from user choice
+                                if (err) {
+                                    console.log(err);
+                                }
+                                response.department_id = row[0].id
+                                const params = [];
+                                const salary = parseInt(response.salary);
+                                params.push(response.title, salary, response.department_id)
+                                const sql = `INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)`;
+                                db.query(sql, params, (err, result) => { // query to create new role
+                                    if (err) {
+                                        console.log(err);
+                                    };
+                                    const sql = `SELECT roles.title, roles.salary, departments.name AS department FROM roles
+                                    LEFT JOIN departments ON roles.department_id = departments.id`;
+                                    db.query(sql, (err, rows) => {
+                                        if (err) {
+                                        console.log(err);
+                                    }
+                                        console.table(rows);
+                                        startApp();                    
+                                    });
+                                });
+                            }) 
                         })
                     }
                     if (response.main === mainChoices[5]) { //add a department
@@ -122,9 +155,10 @@ const startApp = () => {
                         })
                     }
                     if (response.main === mainChoices[7]) { // exit app
-                        stopApp;
+                        return
                     }
                 })
 }
 
 module.exports = startApp();
+
