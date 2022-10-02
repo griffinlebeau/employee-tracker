@@ -1,5 +1,6 @@
 ### Employee Tracker
 Back-end SQL database that can be adjusted to fit a business structure that can be easily accessed and manipulated via the command line
+tutorial link: 
 
 ### Features
 - Easy to operate via CLI
@@ -27,3 +28,10 @@ Back-end SQL database that can be adjusted to fit a business structure that can 
 - Employees table includes full name, role, role salary, and manager
 - Departments table includes the department name
 - Roles table includes the role name, salary, and department the role belongs to
+
+### Future Improvemenets
+
+- Flexible nature of the database allows the addition of more complicated SQL queries 
+- Additional column fields for each table
+- Delete rows from tables
+- Alternate update queries
