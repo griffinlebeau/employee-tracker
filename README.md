@@ -1,6 +1,6 @@
 ### Employee Tracker
 Back-end SQL database that can be adjusted to fit a business structure that can be easily accessed and manipulated via the command line
-tutorial link: 
+# tutorial link: https://drive.google.com/file/d/17LWchrT0uEeLWWZEjPnAu_qGjfTu9YsQ/view
 
 ### Features
 - Easy to operate via CLI
