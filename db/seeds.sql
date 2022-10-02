@@ -14,6 +14,6 @@ VALUES
 
 INSERT INTO employees (last_name, first_name, role_id, manager_id)
 VALUES  
-    ('LeBeau', 'Griffin', '1', '2'),
-    ('Sullivan', 'Kathleen', '2', '1'),
-    ('Haglorf', 'Julianne', '3', '1');
+    ('Harry', 'Potter', '1', '2'),
+    ('Hermoine', 'Granger', '2', '1'),
+    ('Ron', 'Weasley', '3', '1');
